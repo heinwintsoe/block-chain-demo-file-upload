@@ -99,7 +99,7 @@ export class DemoFileUploadComponent implements OnInit {
           // this.uploadedPercentage = 0;
           break;
         case 1: {
-          if (Math.round(this.uploadedPercentage) !== Math.round(event['loaded'] / event['total'] * 100)){
+          if (Math.round(this.uploadedPercentage) !== Math.round(event['loaded'] / event['total'] * 100)) {
             this.uploadedPercentage = event['loaded'] / event['total'] * 100;
           }
           break;
