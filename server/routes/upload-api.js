@@ -3,56 +3,40 @@ var router = express.Router();
 var fs = require('fs');
 var IPFS = require('ipfs-api');
 var Web3 = require('web3');
+var InputDataDecoder = require('ethereum-input-data-decoder');
 var MyContract = require('../smart-contracts/my-contract');
 var AppConfig = require('../config/app-config');
-var UploadTrx = require('../models/upload-trx');
-var TrxStatus = require('../models/trx-status');
+var UploadDoc = require('../models/upload.model');
+var User = require('../models/user.model');
 
-router.post('/upload-file', function (req, res, next) {
+router.post('/upload-file/:username', function (req, res, next) {
     var fstream;
     if (req.busboy) {
         req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
             const ipfs = new IPFS(AppConfig.ipfsConfig);
             ipfs.add(file, async (err, ipfsHash) => {
-                var hash_code = ipfsHash[0].hash;
-                console.log('Ipfs Hash: ' + hash_code);
 
-                const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
-                const accounts = await web3.eth.getAccounts();
-                const sender = accounts[0];
-                console.log('Sender: ' + sender);
-                
-                var uploadTrx = new UploadTrx();
-                uploadTrx.ipfsHash = hash_code;
-                uploadTrx.sender = sender;
-                uploadTrx.filename = filename;
-                uploadTrx.upload_status = TrxStatus.PENDING;
-                console.log(uploadTrx);
-
-                UploadTrx.create(uploadTrx, async function (err, trxEntity) {
+                User.find({ username: req.params.username }, async (err, userDoc) => {
                     if (err) return next(err);
                     
+                    const sender = userDoc[0].address;
+
+                    var uploadDoc = new UploadDoc();
+                    uploadDoc.owner = sender;
+                    uploadDoc.filename = filename;
+                    
+                    const ipfsHashCode = ipfsHash[0].hash;
+                    const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
                     const storehash = new web3.eth.Contract(MyContract.abi, MyContract.address);
-                    const ethAddress = await storehash.options.address;
-                    storehash.methods.sendHash(trxEntity.ipfsHash).send({
+                    storehash.methods.sendHash(ipfsHashCode).send({
                         from: sender
                     }, async (error, transactionHash) => {
-                        trxEntity.trxHash = transactionHash;
-                        trxEntity.upload_status = TrxStatus.ETHEREUM;
-                        await UploadTrx.findByIdAndUpdate(trxEntity._id, trxEntity, function (err, post) {
+                        uploadDoc.trxHash = transactionHash;
+                        await UploadDoc.create(uploadDoc, (err, doc) => {
                             if (err) return next(err);
-                            console.log('Update done');
+                            res.json({ success: true, data: doc });
                         });
-
-                        await UploadTrx.findById(trxEntity._id, function (err, post) {
-                            if (err) return next(err);
-                            console.log('---------- find by id ---------');
-                            console.log(post);
-                            res.json({success: true, data: post});
-                        });
-
                     }); //storehash 
-                    
                 });
             });
 
@@ -66,12 +50,34 @@ router.post('/upload-file', function (req, res, next) {
     } // end of if (req.busboy) {
 })
 
-router.get('/find-all', function(req, res, next) {
-    UploadTrx.find({}, function(err, docs) {
+router.get('/find-all/:username', function(req, res, next) {
+    User.find({ username: req.params.username }, (err, userDoc) => {
         if (err) return next(err);
-        console.log(docs);
-        res.json({success: true, data: docs});
+        UploadDoc.find({owner: userDoc[0].address}, (err, docs) => {
+            if (err) return next(err);
+            res.json({success: true, data: docs});
+        }).sort({ _id: -1 });
     });
+});
+
+router.get('/find-details/:address', async (req, res, next) => {
+    const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
+    await web3.eth.getTransaction(req.params.address, async (err, trxData) => {
+        const decoder = new InputDataDecoder(MyContract.abi);
+        console.log(trxData);
+        const decodedInput = decoder.decodeData(trxData.input);
+        const ipfsHash = decodedInput.inputs[0];
+        var result = {
+            fileDetails: {
+                trxHash: trxData.hash,
+                blockHash: trxData.blockHash,
+                from: trxData.from,
+                fileUrl: 'https://gateway.ipfs.io/ipfs/' + ipfsHash
+            },
+            trxData: trxData
+        };
+        res.json({success: true, data: result});
+    }); //await for getTransactionReceipt
 });
 
 module.exports = router;

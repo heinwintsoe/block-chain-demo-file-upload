@@ -1,12 +1,7 @@
 import { Buffer } from 'buffer';
 
 export class FileUploadTransaction {
-    ipfsHash: string;
-    buffer: Buffer;
-    ethAddress: string;
-    txReceipt: string;
     uploadedDate: string;
-    uploadedStatus: string;
 
     // block chain attributes
     blockHash: string;

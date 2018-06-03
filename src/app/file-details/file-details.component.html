@@ -1,0 +1,32 @@
+<div class="btn-group btn-group-sm" role="group">
+  <button type="button" class="btn btn-primary" (click)="goBack()">
+    <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+  </button>
+  <button type="button" class="btn btn-secondary" (click)="shareFile()">
+    <i class="fa fa-share-alt" aria-hidden="true"></i> Share
+  </button>
+</div>
+<div class="alert alert-info alert-dismissible fade show margin-separator" role="alert" *ngIf="fileShared">
+  File sharing done.
+</div>
+<div class="alert alert-danger alert-dismissible fade show margin-separator" role="alert" *ngIf="fileShareFailed">
+  File sharing failed.
+</div>
+<table class="table table-striped margin-separator" *ngIf="fileDetails">
+  <tbody>
+    <tr>
+      <th scope="row">Trx Hash: </th>
+      <td>{{fileDetails.trxHash}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Block Hash: </th>
+      <td>{{fileDetails.blockHash}}</td>
+    </tr>
+    <tr>
+      <th scope="row">File: </th>
+      <td>
+        <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.fileUrl}}</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

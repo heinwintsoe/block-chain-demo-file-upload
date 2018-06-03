@@ -13,8 +13,10 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 var api = require('./server/routes/api');
 var uploadApi = require('./server/routes/upload-api');
+var userApi = require('./server/routes/user-api');
 app.use('/api', api);
 app.use('/ipfs', uploadApi);
+app.use('/user', userApi);
 
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
