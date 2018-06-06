@@ -15,15 +15,15 @@
 <table class="table table-striped margin-separator" *ngIf="fileDetails">
   <tbody>
     <tr>
-      <th scope="row">Ethereum Address: </th>
+      <th scope="row" class="dark-green-text">Ethereum Address: </th>
       <td>{{fileDetails.trxHash}}</td>
     </tr>
     <tr>
-      <th scope="row">Nirc: </th>
+      <th scope="row" class="dark-green-text">NIRC: </th>
       <td>{{fileDetails.citizen}}</td>
     </tr>
     <tr>
-      <th scope="row">File: </th>
+      <th scope="row" class="dark-green-text">File: </th>
       <td>
         <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.fileUrl}}</a>
       </td>

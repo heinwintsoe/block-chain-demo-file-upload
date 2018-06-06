@@ -1,11 +1,11 @@
 <div class="jumbotron">
   <div class="form-group">
-    <label for="owner">Nirc: </label>
+    <label for="owner" class="dark-green-text"><b>NIRC: </b></label>
     <input type="input" class="form-control card-margin-bottom" id="owner" [(ngModel)]="citizen" required>
-    <label for="upload-file">Select a file to upload.</label>
+    <label for="upload-file" class="dark-green-text"><b>Select a file to upload: </b></label>
     <input type="file" class="form-control-file" id="upload-file" placeholder="File" (change)="onFileSelected($event)">
   </div>
-  <button type="button" (click)="onUpload()" class="btn btn-success btn-sm">Upload</button>
+  <button type="button" (click)="onUpload()" class="btn btn-success btn-sm"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</button>
 </div>
 
 <div class="alert alert-warning alert-dismissible fade show margin-separator" role="alert" *ngIf="uploadedPercentage != 0">
