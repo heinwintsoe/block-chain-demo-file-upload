@@ -5,6 +5,9 @@ import { Location } from '@angular/common';
 
 import { Globals } from '../globals';
 
+import { Artefact } from '../models/artefact.model';
+import { ArtefactData } from '../models/artefact-data.model';
+
 @Component({
   selector: 'app-file-details',
   templateUrl: './file-details.component.html',
@@ -33,6 +36,7 @@ export class FileDetailsComponent implements OnInit {
     const selectedFileAddress = this.route.snapshot.paramMap.get('address');
     this.http.get('/ipfs/find-details/' + selectedFileAddress).subscribe(
       (res) => {
+        console.log(res);
         this.fileDetails = res['data'].fileDetails;
       },
       error => {
@@ -45,15 +49,27 @@ export class FileDetailsComponent implements OnInit {
   }
 
   shareFile(): void {
-    const postUrl = 'http://localhost:3000/api/org.citizenVault.model.Artefact';
+    /*
     const data = {
-      data: [ this.fileDetails.fileUrl ],
-      issuer: {},
-      owner: {},
-      requests: [],
-      authorized: []
+      "id": this.fileDetails.blockHash,
+      "name": "heinwintsoe",
+      "data": [ { "name": "artefact", "value": this.fileDetails.fileUrl } ],
+      "requests": [""],
+      "owner": "resource:org.citizenVault.model.Citizen#" + this.fileDetails.citizen,
+      "authorized": [""]
     };
-    this.http.post(postUrl, data, {
+    */
+    const artefactData = new ArtefactData();
+    artefactData.key = 'artefact';
+    artefactData.value = this.fileDetails.fileUrl;
+
+    const artefact = new Artefact();
+    artefact.id = this.fileDetails.blockHash;
+    artefact.name = 'to-send-file-name';
+    artefact.data = [ artefactData ];
+    artefact.owner = 'resource:org.citizenVault.model.Citizen#' + this.fileDetails.citizen;
+
+    this.http.post(this.globals.config.artefactUrl, artefact, {
       reportProgress: true, observe: 'events'
     }).subscribe(
       (resp) => {

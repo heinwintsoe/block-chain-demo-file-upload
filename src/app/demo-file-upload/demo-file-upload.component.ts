@@ -15,6 +15,7 @@ export class DemoFileUploadComponent implements OnInit {
   uploadedPercentage = 0;
   showMessage = false;
   message: String = '';
+  citizen: String = '';
 
   constructor(
     private http: HttpClient,
@@ -32,9 +33,9 @@ export class DemoFileUploadComponent implements OnInit {
     const fd = new FormData();
     this.showMessage = false;
     console.log(this.selectedFile.name);
+    console.log(this.citizen);
     fd.append('file', this.selectedFile, this.selectedFile.name);
-    fd.append('login_user', 'userone');
-    this.http.post('/ipfs/upload-file/' + this.globals.loggedinUser.username, fd, {
+    this.http.post('/ipfs/upload-file/' + this.globals.loggedinUser.username + '/' + this.citizen, fd, {
       reportProgress: true, observe: 'events'
     }).subscribe(
       (event: HttpEvent<any>) => {

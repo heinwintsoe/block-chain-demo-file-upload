@@ -9,7 +9,7 @@ var AppConfig = require('../config/app-config');
 var UploadDoc = require('../models/upload.model');
 var User = require('../models/user.model');
 
-router.post('/upload-file/:username', function (req, res, next) {
+router.post('/upload-file/:username/:citizen', function (req, res, next) {
     var fstream;
     if (req.busboy) {
         req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
@@ -23,6 +23,7 @@ router.post('/upload-file/:username', function (req, res, next) {
 
                     var uploadDoc = new UploadDoc();
                     uploadDoc.owner = sender;
+                    uploadDoc.citizen = req.params.citizen;
                     uploadDoc.filename = filename;
                     
                     const ipfsHashCode = ipfsHash[0].hash;
@@ -62,22 +63,31 @@ router.get('/find-all/:username', function(req, res, next) {
 
 router.get('/find-details/:address', async (req, res, next) => {
     const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
-    await web3.eth.getTransaction(req.params.address, async (err, trxData) => {
-        const decoder = new InputDataDecoder(MyContract.abi);
-        console.log(trxData);
-        const decodedInput = decoder.decodeData(trxData.input);
-        const ipfsHash = decodedInput.inputs[0];
-        var result = {
-            fileDetails: {
-                trxHash: trxData.hash,
-                blockHash: trxData.blockHash,
-                from: trxData.from,
-                fileUrl: 'https://gateway.ipfs.io/ipfs/' + ipfsHash
-            },
-            trxData: trxData
-        };
-        res.json({success: true, data: result});
-    }); //await for getTransactionReceipt
+
+    await UploadDoc.find({trxHash: req.params.address}, async (err, docs) => { 
+        if (err) return next(err);
+        console.log(docs);
+
+        await web3.eth.getTransaction(req.params.address, async (err, trxData) => {
+            const decoder = new InputDataDecoder(MyContract.abi);
+            console.log(trxData);
+            const decodedInput = decoder.decodeData(trxData.input);
+            const ipfsHash = decodedInput.inputs[0];
+            var result = {
+                fileDetails: {
+                    trxHash: trxData.hash,
+                    blockHash: trxData.blockHash,
+                    from: trxData.from,
+                    citizen: docs[0].citizen,
+                    fileUrl: 'https://gateway.ipfs.io/ipfs/' + ipfsHash
+                },
+                trxData: trxData
+            };
+            res.json({success: true, data: result});
+        }); //await for getTransactionReceipt
+
+    });
+
 });
 
 module.exports = router;

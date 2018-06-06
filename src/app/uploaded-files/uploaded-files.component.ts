@@ -36,6 +36,7 @@ export class UploadedFilesComponent implements OnInit {
               const fileUploadTrx = new FileUploadTransaction();
               fileUploadTrx.transactionHash = doc.trxHash;
               fileUploadTrx.from = doc.owner;
+              fileUploadTrx.citizen = doc.citizen;
               fileUploadTrx.uploadedDate = doc.uploaded_date;
               this.uploadedFiles.push(fileUploadTrx);
             }

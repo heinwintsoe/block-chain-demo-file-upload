@@ -2,6 +2,7 @@ import { Buffer } from 'buffer';
 
 export class FileUploadTransaction {
     uploadedDate: string;
+    citizen: string;
 
     // block chain attributes
     blockHash: string;

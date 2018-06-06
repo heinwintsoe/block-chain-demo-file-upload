@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">Ethereum Hash</th>
-      <th scope="col">Filename</th>
+      <th scope="col">Ethereum Address</th>
+      <th scope="col">Nirc</th>
       <th scope="col">Uploaded Date</th>
     </tr>
   </thead>
@@ -11,7 +11,7 @@
     <tr *ngFor="let uploadedFile of uploadedFiles let i = index" [attr.data-index]="i" (click)="onSelect(uploadedFile)">
       <th scope="row">{{i + 1}}</th>
       <td>{{uploadedFile.transactionHash}}</td>
-      <td> - </td>
+      <td>{{uploadedFile.citizen}}</td>
       <td>{{uploadedFile.uploadedDate | date:'yyyy-MM-dd HH:mm a'}}</td>
     </tr>
   </tbody>
