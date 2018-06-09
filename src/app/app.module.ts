@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { Globals } from './globals';
 
 import { AppComponent } from './app.component';
@@ -30,7 +32,8 @@ import { FileDetailsComponent } from './file-details/file-details.component';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgbModule.forRoot()
   ],
   providers: [Globals],
   bootstrap: [AppComponent]

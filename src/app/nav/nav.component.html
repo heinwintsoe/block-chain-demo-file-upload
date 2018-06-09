@@ -3,10 +3,26 @@
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" routerLink="/app-uploaded-files"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+        <a class="nav-link" routerLink="/app-uploaded-files">
+          <i class="fa fa-home" aria-hidden="true"></i> Home</a>
       </li>
       <li class="nav-item">
-        <a class="btn btn-dark" routerLink="/app-upload"><i class="fa fa-folder-open" aria-hidden="true"></i> Upload</a>
+        <a class="btn btn-dark" routerLink="/app-upload">
+          <i class="fa fa-folder-open" aria-hidden="true"></i> Upload</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav">
+      <li ngbDropdown placement="bottom-right"  class="nav-item dropdown">
+        <a ngbDropdownToggle class="btn btn-dark dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <span style="color: #ffffff"><i class="fa fa-user" aria-hidden="true"></i> {{profile.username}}</span>
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item"><i class="fa fa-address-card-o" aria-hidden="true"></i> {{profile.address}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+        </div>
       </li>
     </ul>
   </div>

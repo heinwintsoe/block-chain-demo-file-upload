@@ -80,7 +80,7 @@ router.get('/find-details/:address', async (req, res, next) => {
                     from: trxData.from,
                     citizen: docs[0].citizen,
                     filename: docs[0].filename,
-                    fileUrl: 'https://gateway.ipfs.io/ipfs/' + ipfsHash
+                    fileUrl: AppConfig.ipfsConfig.ipfsGateway + ipfsHash
                 },
                 trxData: trxData
             };

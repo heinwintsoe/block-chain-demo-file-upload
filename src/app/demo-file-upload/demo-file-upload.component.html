@@ -1,11 +1,34 @@
-<div class="jumbotron">
-  <div class="form-group">
-    <label for="owner" class="dark-green-text"><b>NIRC: </b></label>
-    <input type="input" class="form-control card-margin-bottom" id="owner" [(ngModel)]="citizen" required>
-    <label for="upload-file" class="dark-green-text"><b>Select a file to upload: </b></label>
-    <input type="file" class="form-control-file" id="upload-file" placeholder="File" (change)="onFileSelected($event)">
+<h3 class="dark-green-text margin-separator"><i class="fa fa-server" aria-hidden="true"></i> Upload your file</h3>
+<div class="jumbotron margin-separator">
+  <div class="form-group row">
+    <div class=col-md-12>
+      <label for="owner" class="dark-green-text">
+        <b>NIRC: </b>
+      </label>
+    </div>
+    <div class=col-md-6>
+      <input type="input" class="form-control card-margin-bottom" id="owner" [(ngModel)]="citizen" required>
+    </div>
+  
+    <div class=col-md-12>
+      <label for="upload-file" class="dark-green-text">
+        <b>Select a file to upload: </b>
+      </label>
+    </div>
+    <div class=col-md-12>
+      <input type="file" class="form-control-file" id="upload-file" placeholder="File" (change)="onFileSelected($event)">
+    </div>
   </div>
-  <button type="button" (click)="onUpload()" class="btn btn-success btn-sm"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</button>
+  <div class="form-group row">
+    <div class=col-md-1>
+        <button type="button" (click)="onCancel()" class="btn btn-secondary btn-sm">
+            <i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
+    </div>
+    <div class=col-md-1>
+        <button type="button" (click)="onUpload()" class="btn btn-success btn-sm">
+          <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</button>
+    </div>
+  </div>
 </div>
 
 <div class="alert alert-warning alert-dismissible fade show margin-separator" role="alert" *ngIf="uploadedPercentage != 0">
@@ -15,16 +38,3 @@
 <div class="alert alert-success alert-dismissible fade show margin-separator" role="alert" *ngIf="showMessage">
   {{message}}
 </div>
-<!--
-<div class="table-responsive trxdata-list">
-  <div class="card card-margin-bottom" *ngFor="let trxData of trxDataList let i = index" [attr.data-index]="i">
-    <div class="card-body">
-      <h5 class="card-title">No. {{i + 1}} - uploaded on {{trxData.uploadedDate | date:'yyyy-MM-dd HH:mm a'}}</h5>
-      <div><b>IPFS Hash: </b>{{trxData.ipfsHash}}</div>
-      <div><b>Sender: </b>{{trxData.from}}</div>
-      <div><b>Transaction Hash: </b>{{trxData.transactionHash}}</div>
-      <div><b>Uploaded Status: </b>{{trxData.uploadedStatus}}</div>
-    </div>
-  </div>
-</div>
--->

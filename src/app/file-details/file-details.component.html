@@ -1,8 +1,8 @@
 <div class="btn-group btn-group-sm" role="group">
-  <button type="button" class="btn btn-success" (click)="goBack()">
+  <button type="button" class="btn btn-secondary" (click)="goBack()">
     <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
   </button>
-  <button type="button" class="btn btn-secondary" (click)="shareFile()">
+  <button type="button" class="btn btn-success" (click)="shareFile()">
     <i class="fa fa-share-alt" aria-hidden="true"></i> Share
   </button>
 </div>
@@ -12,6 +12,7 @@
 <div class="alert alert-danger alert-dismissible fade show margin-separator" role="alert" *ngIf="fileShareFailed">
   File sharing failed.
 </div>
+<h3 class="dark-green-text margin-separator"><i class="fa fa-file-text" aria-hidden="true"></i> {{fileDetails.filename}}</h3>
 <table class="table table-striped margin-separator" *ngIf="fileDetails">
   <tbody>
     <tr>

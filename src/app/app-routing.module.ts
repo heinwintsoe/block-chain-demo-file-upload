@@ -8,11 +8,10 @@ import { UploadedFilesComponent } from './uploaded-files/uploaded-files.componen
 import { FileDetailsComponent } from './file-details/file-details.component';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'app-upload', component: DemoFileUploadComponent },
   { path: 'app-uploaded-files', component: UploadedFilesComponent },
-  { path: 'app-about', component: AboutComponent },
   { path: 'app-file-details/:address', component: FileDetailsComponent}
 ];
 

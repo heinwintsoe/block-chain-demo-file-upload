@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Buffer } from 'buffer';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { Globals } from '../globals';
 
@@ -18,6 +20,8 @@ export class DemoFileUploadComponent implements OnInit {
   citizen: String = '';
 
   constructor(
+    private route: ActivatedRoute,
+    private location: Location,
     private http: HttpClient,
     private globals: Globals
   ) { }
@@ -27,6 +31,10 @@ export class DemoFileUploadComponent implements OnInit {
 
   onFileSelected(event) {
     this.selectedFile = <File>event.target.files[0];
+  }
+
+  onCancel(): void {
+    this.location.back();
   }
 
   onUpload() {
