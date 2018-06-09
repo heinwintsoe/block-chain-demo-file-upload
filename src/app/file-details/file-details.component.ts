@@ -49,27 +49,18 @@ export class FileDetailsComponent implements OnInit {
   }
 
   shareFile(): void {
-    /*
-    const data = {
-      "id": this.fileDetails.blockHash,
-      "name": "heinwintsoe",
-      "data": [ { "name": "artefact", "value": this.fileDetails.fileUrl } ],
-      "requests": [""],
-      "owner": "resource:org.citizenVault.model.Citizen#" + this.fileDetails.citizen,
-      "authorized": [""]
-    };
-    */
     const artefactData = new ArtefactData();
-    artefactData.key = 'artefact';
+    artefactData.name = 'artefact';
     artefactData.value = this.fileDetails.fileUrl;
 
     const artefact = new Artefact();
     artefact.id = this.fileDetails.blockHash;
-    artefact.name = 'to-send-file-name';
+    artefact.name = this.fileDetails.filename;
     artefact.data = [ artefactData ];
     artefact.owner = 'resource:org.citizenVault.model.Citizen#' + this.fileDetails.citizen;
 
-    this.http.post(this.globals.config.artefactUrl, artefact, {
+    const artefactJson = JSON.parse(JSON.stringify(artefact));
+    this.http.post(this.globals.config.artefactUrl, artefactJson, {
       reportProgress: true, observe: 'events'
     }).subscribe(
       (resp) => {

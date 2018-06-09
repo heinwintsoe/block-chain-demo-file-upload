@@ -1,4 +1,4 @@
 export class ArtefactData {
-    key: string;
+    name: string;
     value: string;
 }
