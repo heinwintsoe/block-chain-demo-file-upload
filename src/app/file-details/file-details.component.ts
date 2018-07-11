@@ -34,7 +34,7 @@ export class FileDetailsComponent implements OnInit {
 
   getFileDetails() {
     const selectedFileAddress = this.route.snapshot.paramMap.get('address');
-    this.http.get('/ipfs/find-details/' + selectedFileAddress).subscribe(
+    this.http.get('/ipfs/certificate-details/' + selectedFileAddress).subscribe(
       (res) => {
         console.log(res);
         this.fileDetails = res['data'].fileDetails;
@@ -49,15 +49,17 @@ export class FileDetailsComponent implements OnInit {
   }
 
   shareFile(): void {
-    const artefactData = new ArtefactData();
-    artefactData.name = 'artefact';
-    artefactData.value = this.fileDetails.fileUrl;
-
     const artefact = new Artefact();
     artefact.id = this.fileDetails.blockHash;
-    artefact.name = this.fileDetails.filename;
-    artefact.data = [ artefactData ];
-    artefact.owner = 'resource:org.citizenVault.model.Citizen#' + this.fileDetails.citizen;
+    artefact.name = this.fileDetails.certificate.gceLevel + ' Levels';
+    if (this.fileDetails.certificate.gceLevel === 'O') {
+      artefact.data = this.getOLevelSubjects();
+    } else {
+      artefact.data = this.getALevelSubjects();
+    }
+    artefact.issuer = 'resource:org.citizenVault.model.Agency#MOE';
+    artefact.owner = 'resource:org.citizenVault.model.Citizen#' + this.fileDetails.certificate.nirc;
+    artefact.file = this.fileDetails.fileUrl;
 
     const artefactJson = JSON.parse(JSON.stringify(artefact));
     this.http.post(this.globals.config.artefactUrl, artefactJson, {
@@ -74,6 +76,49 @@ export class FileDetailsComponent implements OnInit {
         this.fileShareFailed = true;
       }
     );
+  }
+
+  getOLevelSubjects() {
+    const english = new ArtefactData();
+    english.name = 'English';
+    english.value = this.fileDetails.certificate.englishGrade;
+    const mathematics = new ArtefactData();
+    mathematics.name = 'Mathematics';
+    mathematics.value = this.fileDetails.certificate.mathGrade;
+    const motherTongue = new ArtefactData();
+    motherTongue.name = 'MotherTongue';
+    motherTongue.value = this.fileDetails.certificate.motherTongueGrade;
+    const science = new ArtefactData();
+    science.name = 'Science';
+    science.value = this.fileDetails.certificate.scienceGrade;
+    const grades = [ english, mathematics, motherTongue, science];
+    return grades;
+  }
+
+  getALevelSubjects() {
+    const english = new ArtefactData();
+    english.name = 'English';
+    english.value = this.fileDetails.certificate.englishGrade;
+    const mathematics = new ArtefactData();
+    mathematics.name = 'Mathematics';
+    mathematics.value = this.fileDetails.certificate.mathGrade;
+    const motherTongue = new ArtefactData();
+    motherTongue.name = 'MotherTongue';
+    motherTongue.value = this.fileDetails.certificate.motherTongueGrade;
+    const chemistry = new ArtefactData();
+    chemistry.name = 'Chemistry';
+    chemistry.value = this.fileDetails.certificate.chemistryGrade;
+    const bio = new ArtefactData();
+    bio.name = 'Bio';
+    bio.value = this.fileDetails.certificate.bioGrade;
+    const geography = new ArtefactData();
+    geography.name = 'Geography';
+    geography.value = this.fileDetails.certificate.geographyGrade;
+    const history = new ArtefactData();
+    history.name = 'History';
+    history.value = this.fileDetails.certificate.historyGrade;
+    const grades = [ english, mathematics, motherTongue, chemistry, bio, geography, history];
+    return grades;
   }
 
 }

@@ -3,7 +3,9 @@ export class Artefact {
     id: string;
     name: string;
     data: ArtefactData[];
-    requests: ['']; // default empty value
+    issuer: string;
     owner: string;
-    authorized: [''];
+    file: string;
+    requests: ['']; // default empty value
+    authorized: ['']; // default empty value
 }

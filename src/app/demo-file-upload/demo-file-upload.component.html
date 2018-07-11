@@ -1,40 +1,381 @@
-<h3 class="dark-green-text margin-separator"><i class="fa fa-server" aria-hidden="true"></i> Upload your file</h3>
-<div class="jumbotron margin-separator">
-  <div class="form-group row">
-    <div class=col-md-12>
-      <label for="owner" class="dark-green-text">
-        <b>NIRC: </b>
-      </label>
-    </div>
-    <div class=col-md-6>
-      <input type="input" class="form-control card-margin-bottom" id="owner" [(ngModel)]="citizen" required>
-    </div>
-  
-    <div class=col-md-12>
-      <label for="upload-file" class="dark-green-text">
-        <b>Select a file to upload: </b>
-      </label>
-    </div>
-    <div class=col-md-12>
-      <input type="file" class="form-control-file" id="upload-file" placeholder="File" (change)="onFileSelected($event)">
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class=col-md-1>
-        <button type="button" (click)="onCancel()" class="btn btn-secondary btn-sm">
-            <i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
-    </div>
-    <div class=col-md-1>
-        <button type="button" (click)="onUpload()" class="btn btn-success btn-sm">
-          <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</button>
-    </div>
-  </div>
-</div>
+<h3 class="dark-green-text margin-separator">
+  <i class="fa fa-server" aria-hidden="true"></i> Upload certificate</h3>
+<ngb-tabset>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      GCE O Levels
+    </ng-template>
+    <ng-template ngbTabContent>
+      <div style="margin-top:1rem;" id="gce-o-certificate">
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>NIRC: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <input type="input" class="form-control card-margin-bottom" id="owner" [(ngModel)]="olevelCertificate.nirc" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="upload-file" class="dark-green-text">
+              <b>Certificate: </b>
+            </label>
+          </div>
+          <div class=col-md-10>
+            <input type="file" class="form-control-file" id="upload-file" placeholder="File" (change)="onFileSelected($event)">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <b>
+              <i class="fa fa-book" aria-hidden="true"></i> Subjects</b>
+          </div>
+          <div class=col-md-6>
+            <b>
+              <i class="fa fa-graduation-cap" aria-hidden="true"></i> Grades</b>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>English: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.englishGrade !== 'A', 'btn-success': olevelCertificate.englishGrade === 'A'}">
+                <input type="radio" name="english_grade" [(ngModel)]="olevelCertificate.englishGrade" value="A" id="option1" autocomplete="off"> Grade A
+              </label>
+              <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.englishGrade !== 'B', 'btn-success': olevelCertificate.englishGrade === 'B'}">
+                <input type="radio" name="english_grade" [(ngModel)]="olevelCertificate.englishGrade" value="B" id="option2" autocomplete="off"> Grade B
+              </label>
+              <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.englishGrade !== 'C', 'btn-success': olevelCertificate.englishGrade === 'C'}">
+                <input type="radio" name="english_grade" [(ngModel)]="olevelCertificate.englishGrade" value="C" id="option3" autocomplete="off"> Grade C
+              </label>
+              <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.englishGrade !== 'D', 'btn-success': olevelCertificate.englishGrade === 'D'}">
+                <input type="radio" name="english_grade" [(ngModel)]="olevelCertificate.englishGrade" value="D" id="option3" autocomplete="off"> Grade D
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>Mathematics: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.mathGrade !== 'A', 'btn-success': olevelCertificate.mathGrade === 'A'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="olevelCertificate.mathGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.mathGrade !== 'B', 'btn-success': olevelCertificate.mathGrade === 'B'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="olevelCertificate.mathGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.mathGrade !== 'C', 'btn-success': olevelCertificate.mathGrade === 'C'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="olevelCertificate.mathGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.mathGrade !== 'D', 'btn-success': olevelCertificate.mathGrade === 'D'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="olevelCertificate.mathGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>MotherTongue: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.motherTongueGrade !== 'A', 'btn-success': olevelCertificate.motherTongueGrade === 'A'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="olevelCertificate.motherTongueGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.motherTongueGrade !== 'B', 'btn-success': olevelCertificate.motherTongueGrade === 'B'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="olevelCertificate.motherTongueGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.motherTongueGrade !== 'C', 'btn-success': olevelCertificate.motherTongueGrade === 'C'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="olevelCertificate.motherTongueGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.motherTongueGrade !== 'D', 'btn-success': olevelCertificate.motherTongueGrade === 'D'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="olevelCertificate.motherTongueGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>Science: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.scienceGrade !== 'A', 'btn-success': olevelCertificate.scienceGrade === 'A'}">
+                  <input type="radio" name="science_grade" [(ngModel)]="olevelCertificate.scienceGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.scienceGrade !== 'B', 'btn-success': olevelCertificate.scienceGrade === 'B'}">
+                  <input type="radio" name="science_grade" [(ngModel)]="olevelCertificate.scienceGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.scienceGrade !== 'C', 'btn-success': olevelCertificate.scienceGrade === 'C'}">
+                  <input type="radio" name="science_grade" [(ngModel)]="olevelCertificate.scienceGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': olevelCertificate.scienceGrade !== 'D', 'btn-success': olevelCertificate.scienceGrade === 'D'}">
+                  <input type="radio" name="science_grade" [(ngModel)]="olevelCertificate.scienceGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-1>
+            <button type="button" (click)="onCancel()" class="btn btn-secondary btn-sm">
+              <i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
+          </div>
+          <div class=col-md-1>
+            <button type="button" (click)="onUploadOLevelCertificate()" class="btn btn-success btn-sm">
+              <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>
+      GCE A Levels
+    </ng-template>
+    <ng-template ngbTabContent>
+      <div style="margin-top:1rem;" id="gce-o-certificate">
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>NIRC: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <input type="input" class="form-control card-margin-bottom" id="owner" [(ngModel)]="alevelCertificate.nirc" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="upload-file" class="dark-green-text">
+              <b>Certificate: </b>
+            </label>
+          </div>
+          <div class=col-md-10>
+            <input type="file" class="form-control-file" id="upload-file" placeholder="File" (change)="onFileSelected($event)">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <b>
+              <i class="fa fa-book" aria-hidden="true"></i> Subjects</b>
+          </div>
+          <div class=col-md-6>
+            <b>
+              <i class="fa fa-graduation-cap" aria-hidden="true"></i> Grades</b>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>English: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.englishGrade !== 'A', 'btn-success': alevelCertificate.englishGrade === 'A'}">
+                <input type="radio" name="english_grade" [(ngModel)]="alevelCertificate.englishGrade" value="A" id="option1" autocomplete="off"> Grade A
+              </label>
+              <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.englishGrade !== 'B', 'btn-success': alevelCertificate.englishGrade === 'B'}">
+                <input type="radio" name="english_grade" [(ngModel)]="alevelCertificate.englishGrade" value="B" id="option2" autocomplete="off"> Grade B
+              </label>
+              <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.englishGrade !== 'C', 'btn-success': alevelCertificate.englishGrade === 'C'}">
+                <input type="radio" name="english_grade" [(ngModel)]="alevelCertificate.englishGrade" value="C" id="option3" autocomplete="off"> Grade C
+              </label>
+              <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.englishGrade !== 'D', 'btn-success': alevelCertificate.englishGrade === 'D'}">
+                <input type="radio" name="english_grade" [(ngModel)]="alevelCertificate.englishGrade" value="D" id="option3" autocomplete="off"> Grade D
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>Mathematics: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.mathGrade !== 'A', 'btn-success': alevelCertificate.mathGrade === 'A'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="alevelCertificate.mathGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.mathGrade !== 'B', 'btn-success': alevelCertificate.mathGrade === 'B'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="alevelCertificate.mathGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.mathGrade !== 'C', 'btn-success': alevelCertificate.mathGrade === 'C'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="alevelCertificate.mathGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.mathGrade !== 'D', 'btn-success': alevelCertificate.mathGrade === 'D'}">
+                  <input type="radio" name="math_grade" [(ngModel)]="alevelCertificate.mathGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>MotherTongue: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.motherTongueGrade !== 'A', 'btn-success': alevelCertificate.motherTongueGrade === 'A'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="alevelCertificate.motherTongueGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.motherTongueGrade !== 'B', 'btn-success': alevelCertificate.motherTongueGrade === 'B'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="alevelCertificate.motherTongueGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.motherTongueGrade !== 'C', 'btn-success': alevelCertificate.motherTongueGrade === 'C'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="alevelCertificate.motherTongueGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.motherTongueGrade !== 'D', 'btn-success': alevelCertificate.motherTongueGrade === 'D'}">
+                  <input type="radio" name="motherTongue_grade" [(ngModel)]="alevelCertificate.motherTongueGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>Chemistry: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.chemistryGrade !== 'A', 'btn-success': alevelCertificate.chemistryGrade === 'A'}">
+                  <input type="radio" name="chemistry_grade" [(ngModel)]="alevelCertificate.chemistryGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.chemistryGrade !== 'B', 'btn-success': alevelCertificate.chemistryGrade === 'B'}">
+                  <input type="radio" name="chemistry_grade" [(ngModel)]="alevelCertificate.chemistryGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.chemistryGrade !== 'C', 'btn-success': alevelCertificate.chemistryGrade === 'C'}">
+                  <input type="radio" name="chemistry_grade" [(ngModel)]="alevelCertificate.chemistryGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.chemistryGrade !== 'D', 'btn-success': alevelCertificate.chemistryGrade === 'D'}">
+                  <input type="radio" name="chemistry_grade" [(ngModel)]="alevelCertificate.chemistryGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>Bio: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.bioGrade !== 'A', 'btn-success': alevelCertificate.bioGrade === 'A'}">
+                  <input type="radio" name="bio_grade" [(ngModel)]="alevelCertificate.bioGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.bioGrade !== 'B', 'btn-success': alevelCertificate.bioGrade === 'B'}">
+                  <input type="radio" name="bio_grade" [(ngModel)]="alevelCertificate.bioGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.bioGrade !== 'C', 'btn-success': alevelCertificate.bioGrade === 'C'}">
+                  <input type="radio" name="bio_grade" [(ngModel)]="alevelCertificate.bioGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.bioGrade !== 'D', 'btn-success': alevelCertificate.bioGrade === 'D'}">
+                  <input type="radio" name="bio_grade" [(ngModel)]="alevelCertificate.bioGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>Geography: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.geographyGrade !== 'A', 'btn-success': alevelCertificate.geographyGrade === 'A'}">
+                  <input type="radio" name="geography_grade" [(ngModel)]="alevelCertificate.geographyGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.geographyGrade !== 'B', 'btn-success': alevelCertificate.geographyGrade === 'B'}">
+                  <input type="radio" name="geography_grade" [(ngModel)]="alevelCertificate.geographyGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.geographyGrade !== 'C', 'btn-success': alevelCertificate.geographyGrade === 'C'}">
+                  <input type="radio" name="geography_grade" [(ngModel)]="alevelCertificate.geographyGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.geographyGrade !== 'D', 'btn-success': alevelCertificate.geographyGrade === 'D'}">
+                  <input type="radio" name="geography_grade" [(ngModel)]="alevelCertificate.geographyGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-2>
+            <label for="owner" class="dark-green-text">
+              <b>History: </b>
+            </label>
+          </div>
+          <div class=col-md-6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.historyGrade !== 'A', 'btn-success': alevelCertificate.historyGrade === 'A'}">
+                  <input type="radio" name="history_grade" [(ngModel)]="alevelCertificate.historyGrade" value="A" id="option1" autocomplete="off"> Grade A
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.historyGrade !== 'B', 'btn-success': alevelCertificate.historyGrade === 'B'}">
+                  <input type="radio" name="history_grade" [(ngModel)]="alevelCertificate.historyGrade" value="B" id="option2" autocomplete="off"> Grade B
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.historyGrade !== 'C', 'btn-success': alevelCertificate.historyGrade === 'C'}">
+                  <input type="radio" name="history_grade" [(ngModel)]="alevelCertificate.historyGrade" value="C" id="option3" autocomplete="off"> Grade C
+                </label>
+                <label [ngClass]="{'btn': true, 'btn-secondary': alevelCertificate.historyGrade !== 'D', 'btn-success': alevelCertificate.historyGrade === 'D'}">
+                  <input type="radio" name="history_grade" [(ngModel)]="alevelCertificate.historyGrade" value="D" id="option3" autocomplete="off"> Grade D
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class=col-md-1>
+            <button type="button" (click)="onCancel()" class="btn btn-secondary btn-sm">
+              <i class="fa fa-ban" aria-hidden="true"></i> Cancel</button>
+          </div>
+          <div class=col-md-1>
+            <button type="button" (click)="onUploadALevelCertificate()" class="btn btn-success btn-sm">
+              <i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
 
 <div class="alert alert-warning alert-dismissible fade show margin-separator" role="alert" *ngIf="uploadedPercentage != 0">
   Uploading the file .....
 </div>
 
 <div class="alert alert-success alert-dismissible fade show margin-separator" role="alert" *ngIf="showMessage">
-  {{message}}
+  Uploaded successfully!
 </div>

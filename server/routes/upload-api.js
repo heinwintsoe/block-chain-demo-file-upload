@@ -9,47 +9,73 @@ var AppConfig = require('../config/app-config');
 var UploadDoc = require('../models/upload.model');
 var User = require('../models/user.model');
 
-router.post('/upload-file/:username/:citizen', function (req, res, next) {
-    var fstream;
+var GceCertificate = require('../smart-contracts/gce-certificate');
+router.post('/upload-certificate', function(req, res, next) {
+    console.log('/upload-certificate');
     if (req.busboy) {
+        var submittedData = {};
+        req.busboy.on('field', function (fieldname, fieldvalue) {
+            submittedData[fieldname] = fieldvalue;
+        });
         req.busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
             const ipfs = new IPFS(AppConfig.ipfsConfig);
+            console.log('Uploadeding to IPFS - ' + filename);
             ipfs.add(file, async (err, ipfsHash) => {
+                const certificateData = JSON.parse(submittedData.certificateData);
+                certificateData.filename = filename;
+                certificateData.file = ipfsHash[0].hash;
+                const senderInfo = JSON.parse(submittedData.senderInfo);
 
-                User.find({ username: req.params.username }, async (err, userDoc) => {
-                    if (err) return next(err);
-                    
-                    const sender = userDoc[0].address;
-
-                    var uploadDoc = new UploadDoc();
-                    uploadDoc.owner = sender;
-                    uploadDoc.citizen = req.params.citizen;
-                    uploadDoc.filename = filename;
-                    
-                    const ipfsHashCode = ipfsHash[0].hash;
-                    const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
-                    const storehash = new web3.eth.Contract(MyContract.abi, MyContract.address);
-                    storehash.methods.sendHash(ipfsHashCode).send({
-                        from: sender
-                    }, async (error, transactionHash) => {
-                        uploadDoc.trxHash = transactionHash;
-                        await UploadDoc.create(uploadDoc, (err, doc) => {
+                console.log('Sending to ethereum - GCE ' + JSON.stringify(certificateData));
+                const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
+                const gceCertificateContract = new web3.eth.Contract(GceCertificate.abi, GceCertificate.address);
+                const sender = senderInfo.address;
+                gceCertificateContract.methods.saveCertificate(JSON.stringify(certificateData))
+                    .send({ from: sender, gas: 3000000 }).on('transactionHash', async (txnHash) => {
+                        console.log('Persisting into database - ' + txnHash);
+                        var uploadedFile = new UploadDoc();
+                        uploadedFile.owner = senderInfo.address;
+                        uploadedFile.citizen = certificateData.nirc;
+                        uploadedFile.filename = filename;
+                        uploadedFile.trxHash = txnHash;
+                        await UploadDoc.create(uploadedFile, (err, doc) => {
                             if (err) return next(err);
                             res.json({ success: true, data: doc });
                         });
-                    }); //storehash 
-                });
-            });
+                    });
 
-            req.busboy.on('finish', function () {
-                console.log('Finish, files uploaded ');
             });
         });
-
+        req.busboy.on('finish', function () {
+            console.log('Certificate is received.');
+        });
         req.pipe(req.busboy);
+    }
+});
 
-    } // end of if (req.busboy) {
-})
+router.get('/certificate-details/:address', async (req, res, next) => {
+    console.log('/certificate-details/:address');
+    const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
+    web3.eth.getTransaction(req.params.address, async (err, trxData) => {
+        console.log('Decoding trx data');
+        const decoder = new InputDataDecoder(GceCertificate.abi);
+        const decodedInput = decoder.decodeData(trxData.input);
+        const certificateData = JSON.parse(decodedInput.inputs[0]);
+        console.log(certificateData);
+        var result = {
+            fileDetails: {
+                trxHash: trxData.hash,
+                blockHash: trxData.blockHash,
+                from: trxData.from,
+                certificate: certificateData,
+                fileUrl: AppConfig.ipfsConfig.ipfsGateway + certificateData.file
+            },
+            trxData: trxData
+        };
+        res.json({success: true, data: result});
+    });
+
+});
 
 router.get('/find-all/:username', function(req, res, next) {
     User.find({ username: req.params.username }, (err, userDoc) => {
@@ -59,36 +85,6 @@ router.get('/find-all/:username', function(req, res, next) {
             res.json({success: true, data: docs});
         }).sort({ _id: -1 });
     });
-});
-
-router.get('/find-details/:address', async (req, res, next) => {
-    const web3 = new Web3(new Web3.providers.HttpProvider(AppConfig.ethereum.networkUrl));
-
-    await UploadDoc.find({trxHash: req.params.address}, async (err, docs) => { 
-        if (err) return next(err);
-        console.log(docs);
-
-        await web3.eth.getTransaction(req.params.address, async (err, trxData) => {
-            const decoder = new InputDataDecoder(MyContract.abi);
-            console.log(trxData);
-            const decodedInput = decoder.decodeData(trxData.input);
-            const ipfsHash = decodedInput.inputs[0];
-            var result = {
-                fileDetails: {
-                    trxHash: trxData.hash,
-                    blockHash: trxData.blockHash,
-                    from: trxData.from,
-                    citizen: docs[0].citizen,
-                    filename: docs[0].filename,
-                    fileUrl: AppConfig.ipfsConfig.ipfsGateway + ipfsHash
-                },
-                trxData: trxData
-            };
-            res.json({success: true, data: result});
-        }); //await for getTransactionReceipt
-
-    });
-
 });
 
 module.exports = router;

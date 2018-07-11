@@ -12,7 +12,7 @@
 <div class="alert alert-danger alert-dismissible fade show margin-separator" role="alert" *ngIf="fileShareFailed">
   File sharing failed.
 </div>
-<h3 class="dark-green-text margin-separator"><i class="fa fa-file-text" aria-hidden="true"></i> {{fileDetails.filename}}</h3>
+<h3 class="dark-green-text margin-separator"><i class="fa fa-file-text" aria-hidden="true"></i> {{fileDetails.certificate.gceLevel}} Levels Certificate</h3>
 <table class="table table-striped margin-separator" *ngIf="fileDetails">
   <tbody>
     <tr>
@@ -21,13 +21,65 @@
     </tr>
     <tr>
       <th scope="row" class="dark-green-text">NIRC: </th>
-      <td>{{fileDetails.citizen}}</td>
+      <td>{{fileDetails.certificate.nirc}}</td>
     </tr>
     <tr>
       <th scope="row" class="dark-green-text">File: </th>
       <td>
         <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.fileUrl}}</a>
       </td>
+    </tr>
+    <tr>
+        <th scope="row" class="dark-green-text"><i class="fa fa-book" aria-hidden="true"></i> Subjects</th>
+        <th scope="row" class="dark-green-text"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Grades</th>
+    </tr>
+    <tr>
+        <td>English: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.englishGrade}}</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Mathematics: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.mathGrade}}</a>
+        </td>
+    </tr>
+    <tr>
+        <td scope="row" class="dark-green-text">MotherTongue: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.motherTongueGrade}}</a>
+        </td>
+    </tr>
+    <tr *ngIf="fileDetails.certificate.scienceGrade">
+        <td>Science: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.scienceGrade}}</a>
+        </td>
+    </tr>
+    <tr *ngIf="fileDetails.certificate.chemistryGrade">
+        <td>Chemistry: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.chemistryGrade}}</a>
+        </td>
+    </tr>
+    <tr *ngIf="fileDetails.certificate.bioGrade">
+        <td>Bio: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.bioGrade}}</a>
+        </td>
+    </tr>
+    <tr *ngIf="fileDetails.certificate.geographyGrade">
+        <td>Geography: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.geographyGrade}}</a>
+        </td>
+    </tr>
+    <tr *ngIf="fileDetails.certificate.historyGrade">
+        <td>History: </td>
+        <td>
+          <a href="{{fileDetails.fileUrl}}" target="_open">{{fileDetails.certificate.historyGrade}}</a>
+        </td>
     </tr>
   </tbody>
 </table>
