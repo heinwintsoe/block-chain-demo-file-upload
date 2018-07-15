@@ -11,7 +11,7 @@ export class NavComponent implements OnInit {
 
   profile;
 
-  brandTitile = 'IPFS & Ethereum Demo';
+  brandTitile = 'Agency (Ethereum)';
 
   constructor(
     private globals: Globals

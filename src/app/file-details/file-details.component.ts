@@ -7,6 +7,7 @@ import { Globals } from '../globals';
 
 import { Artefact } from '../models/artefact.model';
 import { ArtefactData } from '../models/artefact-data.model';
+import { ArtefactTransaction } from '../models/ArtefaceTransaction.model';
 
 @Component({
   selector: 'app-file-details',
@@ -61,8 +62,11 @@ export class FileDetailsComponent implements OnInit {
     artefact.owner = 'resource:org.citizenVault.model.Citizen#' + this.fileDetails.certificate.nirc;
     artefact.file = this.fileDetails.fileUrl;
 
-    const artefactJson = JSON.parse(JSON.stringify(artefact));
-    this.http.post(this.globals.config.artefactUrl, artefactJson, {
+    const artefactTxn = new ArtefactTransaction();
+    artefactTxn.artefact = artefact;
+
+    const artefactTxnJson = JSON.parse(JSON.stringify(artefactTxn));
+    this.http.post(this.globals.config.artefactUrl, artefactTxnJson, {
       reportProgress: true, observe: 'events'
     }).subscribe(
       (resp) => {
